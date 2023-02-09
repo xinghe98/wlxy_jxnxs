@@ -13,7 +13,7 @@ requests.interceptors.response.use((resp) => {
 		requests.defaults.headers.common["Cookie"] = cookies;
 		return Promise.resolve(resp);
 	} else {
-		return resp;
+		return Promise.resolve(resp);
 	}
 });
 
