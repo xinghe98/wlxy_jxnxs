@@ -22,7 +22,7 @@ async function ques() {
 	});
 }
 
-// 获取验证码并保存到本地，返回cookie(包含验证码的cookie)
+/** 获取验证码并保存到本地，返回cookie(包含验证码的cookie) */
 async function getCaptcha(url: string) {
 	let resp = await requests.get(url, {
 		responseType: "arraybuffer",
@@ -31,7 +31,7 @@ async function getCaptcha(url: string) {
 	fs.writeFileSync("captcha.png", resp.data);
 }
 
-/* 登录，返回cookie（包含登录信息的cookie）
+/** 登录，返回cookie（包含登录信息的cookie）
 @param username 用户名
 @param password 密码(默认为"/DFGws7yGmJIUmbuYMU+Mg==")
 @param captcha 验证码 */
