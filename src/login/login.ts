@@ -1,6 +1,6 @@
 let readline = require("readline");
-import axios from "axios";
 import config from "../settings/settings";
+import requests from "../http/requests";
 
 // 用于终端输入交互
 let rl = readline.createInterface({
@@ -23,30 +23,21 @@ async function ques() {
 }
 
 // 获取验证码并保存到本地，返回cookie(包含验证码的cookie)
-async function getCaptcha(url: string): Promise<string> {
-	let resp = await axios.get(url, {
+async function getCaptcha(url: string) {
+	let resp = await requests.get(url, {
 		responseType: "arraybuffer",
 	});
 	const fs = require("fs");
 	fs.writeFileSync("captcha.png", resp.data);
-	if (resp.headers["set-cookie"]) {
-		return resp.headers["set-cookie"].join(";");
-	} else {
-		return "";
-	}
 }
 
 /* 登录，返回cookie（包含登录信息的cookie）
 @param username 用户名
 @param password 密码(默认为"/DFGws7yGmJIUmbuYMU+Mg==")
 @param captcha 验证码 */
-async function getCooie(
-	username: string,
-	password: string = "/DFGws7yGmJIUmbuYMU+Mg==",
-): Promise<string> {
-	let cookie = await getCaptcha(config.captchaUri);
+async function getCooie(username: string, password: string = "/DFGws7yGmJIUmbuYMU+Mg==") {
 	let captcha = await ques();
-	let resp = await axios.post(
+	let resp = await requests.post(
 		config.loginUri,
 		{
 			usrSteUsrId: username,
@@ -56,16 +47,15 @@ async function getCooie(
 		{
 			headers: {
 				"Content-Type": "application/json",
-				Cookie: cookie,
 			},
 		},
 	);
-	console.log(resp.data);
-	if (resp.data["code"] == "200" && resp["headers"]["set-cookie"]) {
-		return resp["headers"]["set-cookie"].join(";");
-	} else {
-		throw new Error("登录失败" + resp.data["msg"]);
+	if (resp.data["code"] != 200) {
+		console.log(resp.data["msg"]);
+		throw new Error("登录失败");
 	}
+
+	console.log(resp.data);
 }
 
-export { getCooie };
+export { getCaptcha, getCooie };
