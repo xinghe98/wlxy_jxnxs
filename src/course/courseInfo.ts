@@ -21,18 +21,22 @@ class CourseInfo {
 	private cmt_lrn_pass_ind = "";
 	/**GetMyCourse 访问 http://wlxy.jxnxs.com/app/course/getMyCourse 获取未学课程列表*/
 	async getMyCourse(): Promise<string[]> {
-		const timestamp = Date.parse(new Date().toString());
-		const resp = await requests.post(config.getMyCourseUri, {
-			pageNo: "1",
-			pageSize: "50",
-			appStatus: "I",
-			pdate: timestamp,
-		});
+		const timestamp = new Date().getTime();
+		const resp = await requests.post(
+			config.getMyCourseUri,
+			{
+				pageNo: "1",
+				pageSize: "50",
+				appStatus: "I",
+				pdate: timestamp.toString(),
+			},
+			{
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+				},
+			},
+		);
 		const data = resp.data["rows"];
-		/* const courseList: string[] = [];
-		for (const course of data) {
-			courseList.push(course.res_id);
-		} */
 		return data;
 	}
 }
