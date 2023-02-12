@@ -4,10 +4,12 @@ import config from "./settings/settings";
 import courseInfo from "./course/courseInfo";
 
 async function getCourse() {
-	await getCooie("110371");
-	// let resp = await courseInfo.getMyCourse();
+	await getCooie("110326");
+	let res = await courseInfo.getMyCourse();
+	console.log(res);
+
 	let resp = await requests.get(config.testUri);
-	console.log(resp);
+	console.log(resp.data);
 }
 
 getCourse();

@@ -8,8 +8,8 @@ async function getCaptcha(url: string) {
 		responseType: "arraybuffer",
 	});
 	let base64 = Buffer.from(resp.data, "binary").toString("base64");
-	console.log(resp);
 	const result = await captchaOcr.getOcrResult(base64);
+	console.log(result);
 	return result;
 }
 
@@ -34,7 +34,6 @@ async function getCooie(username: string, password: string = "/DFGws7yGmJIUmbuYM
 		},
 	);
 	// console.log(resp.headers);
-	console.log(resp.request._header);
 	if (resp.data["code"] != 200) {
 		console.log(resp.data["msg"]);
 		throw new Error("登录失败");

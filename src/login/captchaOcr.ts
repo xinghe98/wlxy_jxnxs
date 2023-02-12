@@ -14,7 +14,7 @@ class CaptchaOcr {
 					"Content-Type": "application/json",
 				},
 			});
-			return JSON.stringify(resp.data.data.data);
+			return resp.data.data.data;
 		} catch (error) {
 			console.log(error);
 			return;
