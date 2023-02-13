@@ -17,7 +17,7 @@ async function getCaptcha(url: string) {
 @param username 用户名
 @param password 密码(默认为"/DFGws7yGmJIUmbuYMU+Mg==")
 @param captcha 验证码 */
-async function getCooie(username: string, password: string = "/DFGws7yGmJIUmbuYMU+Mg==") {
+async function login(username: string, password: string = "/DFGws7yGmJIUmbuYMU+Mg==") {
 	let result = await getCaptcha(config.captchaUri);
 	let resp = await requests.post(
 		config.loginUri,
@@ -42,4 +42,4 @@ async function getCooie(username: string, password: string = "/DFGws7yGmJIUmbuYM
 	console.log(resp.data);
 }
 
-export { getCaptcha, getCooie };
+export { getCaptcha, login };
