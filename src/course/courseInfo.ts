@@ -20,7 +20,7 @@ class CourseInfo {
 	private tkh_id = "";
 	private cmt_lrn_pass_ind = "";
 	/**GetMyCourse 访问 http://wlxy.jxnxs.com/app/course/getMyCourse 获取未学课程列表*/
-	async getMyCourse(): Promise<string[]> {
+	async getMyCourse(): Promise<number[]> {
 		const timestamp = new Date().getTime();
 		const resp = await requests.post(
 			config.getMyCourseUri,
@@ -36,8 +36,12 @@ class CourseInfo {
 				},
 			},
 		);
+		let ItemId_list: number[] = [];
 		const data = resp.data["rows"];
-		return data;
+		for (let i = 0; i < data.length; i++) {
+			ItemId_list.push(data[i]["item"]["itm_id"]);
+		}
+		return ItemId_list;
 	}
 }
 
