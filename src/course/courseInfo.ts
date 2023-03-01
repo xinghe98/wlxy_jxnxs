@@ -11,24 +11,16 @@ import requests from "../http/requests";
 import config from "../settings/settings";
 
 class CourseInfo {
-	private course_id = "";
-	private student_id = "";
-	private lesson_id = "";
-	private lesson_location = "default";
-	private time = "";
-	private start_time = "";
-	private tkh_id = "";
-	private cmt_lrn_pass_ind = "";
+	private timestamp = new Date().getTime();
 	/**GetMyCourse 访问 http://wlxy.jxnxs.com/app/course/getMyCourse 获取未学课程列表*/
 	async getMyCourse(): Promise<number[]> {
-		const timestamp = new Date().getTime();
 		const resp = await requests.post(
 			config.getMyCourseUri,
 			{
 				pageNo: "1",
 				pageSize: "50",
 				appStatus: "I",
-				pdate: timestamp.toString(),
+				pdate: this.timestamp.toString(),
 			},
 			{
 				headers: {
@@ -42,6 +34,21 @@ class CourseInfo {
 			ItemId_list.push(data[i]["item"]["itm_id"]);
 		}
 		return ItemId_list;
+	}
+	async GetCourseDetail(
+		itemId: number,
+	): Promise<{ resId: number; tkhId: number; studentId: number; coscontent: number }> {
+		const uri =
+			"http://wlxy.jxnxs.com/app/course/detailJson/" +
+			itemId +
+			"?pdate=" +
+			this.timestamp.toString();
+		const response = await (await requests.get(uri)).data;
+		let resId: number = response["resId"];
+		let tkhId: number = response["app"]["app_tkh_id"];
+		let studentId: number = response["userEntId"];
+		let coscontent: number = response["coscontent"];
+		return { resId, tkhId, studentId, coscontent };
 	}
 }
 

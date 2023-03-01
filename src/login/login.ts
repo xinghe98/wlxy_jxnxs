@@ -9,7 +9,6 @@ async function getCaptcha(url: string) {
 	});
 	let base64 = Buffer.from(resp.data, "binary").toString("base64");
 	const result = await captchaOcr.getOcrResult(base64);
-	console.log(result);
 	return result;
 }
 
@@ -38,8 +37,6 @@ async function login(username: string, password: string = "/DFGws7yGmJIUmbuYMU+M
 		console.log(resp.data["msg"]);
 		throw new Error("登录失败");
 	}
-
-	console.log(resp.data);
 }
 
 export { getCaptcha, login };
